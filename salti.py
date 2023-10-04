@@ -37,37 +37,36 @@ class Salti:
         self.serial.flushInput()
         self.log('Finished booting up')
     
-    def call(self, target: str):
+    def call(self, target:str):
         try:
             self.log(f"Calling {target}...")
             rec_buff = ''
-            self.serial.write((f"ATD{target};" + '\r\n').encode())
+            self.serial.write((f"ATD{target};"+'\r\n').encode())
             time.sleep(20)
             if self.serial.inWaiting():
-                time.sleep(0.01)
+                time.sleep(0.01 )
                 rec_buff = self.serial.read(self.serial.inWaiting())
-            
-            response = rec_buff.decode()
-            
-            if "OK" not in response:
-                self.log(f"Failure: {response}", "failure")
-                return False
-            elif "NO CARRIER" in response:
-                self.log(f"Call to {target} was not picked up.", "failure")
-                return False
+            if "OK" not in rec_buff.decode():
+                self.log(f"failure: {rec_buff.decode()}", "failure")
+                return 0
             else:
                 self.log(f"Successfully called {target}!", "success")
-                return True
+                return 1
         except Exception as e:
-            self.log(f"Error: {e}", "error")
-            return False
+            self.log(f"err: {e}", "error")
+            return 0
+
+    def hangup(self):
+        self.serial.write('AT+CHUP\r\n'.encode())
+        self.log('Call disconnected')
 
 
 s = Salti()
 s.power()
-
+s.hangup()
 while True:
     target = input("Enter number: ")
     if target == "exit":
         break
     s.call(target)
+    s.hangup()
