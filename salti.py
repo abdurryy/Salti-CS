@@ -46,7 +46,7 @@ class Salti:
                 self.log(f"Successfully called {target}!", "success")
                 return 1
         except Exception as e:
-            self.log(f"err: {e}", "error")
+            self.log(f"err: {str(e)}", "error")
             return 0
 
     def hangup(self):
