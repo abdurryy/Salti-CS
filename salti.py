@@ -1,10 +1,10 @@
 # This project is fully coded and created by Abdurrahman Giumale.
 # Read more on github: https://github.com/abdurryy/Salti-CS
 # This is only for educational purposes.
+from datetime import datetime
 import RPi.GPIO as GPIO
 import colorama
 import time
-import datetime
 import serial
 
 class Salti:
