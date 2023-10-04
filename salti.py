@@ -1,0 +1,65 @@
+# This project is fully coded and created by Abdurrahman Giumale.
+# Read more on github: https://github.com/abdurryy/Salti-CS
+# This is only for educational purposes.
+import RPi.GPIO as GPIO
+import colorama
+import time
+import datetime
+import serial
+
+class Salti:
+    def __init__(self):
+        colorama.init()
+        self.serial = serial.Serial('/dev/ttyS0',115200)
+        self.serial.flushInput()
+        self.name = "Salti CS"
+    
+    def time(self):
+        return colorama.Fore.WHITE +"["+ datetime.now().strftime("%H:%M:%S")+"] "
+    
+    def log(self, msg:str, type:str="default"):
+        color = colorama.Fore.BLUE
+        if type == "error":
+            color = colorama.Fore.RED
+        elif type == "success":
+            color = colorama.Fore.GREEN
+        elif type == "failure":
+            color = colorama.Fore.LIGHTRED_EX
+        print(f"{self.time()}{colorama.Fore.LIGHTMAGENTA_EX}{self.name} | {color}{msg}")
+
+    def power(self):
+        self.log('Booting up')
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(6,GPIO.OUT)
+        GPIO.output(6,GPIO.HIGH)
+        GPIO.output(6,GPIO.LOW)
+        self.serial.flushInput()
+        self.log('Finished booting up')
+    
+    def call(self, target:str):
+        try:
+            rec_buff = ''
+            self.serial.write(("AT+CHUP\r\n"+'\r\n').encode())
+            time.sleep(10)
+            if self.serial.inWaiting():
+                time.sleep(0.01 )
+                rec_buff = self.serial.read(self.serial.inWaiting())
+            if "OK" not in rec_buff.decode():
+                self.log(f"failure: {rec_buff.decode()}", "failure")
+                return 0
+            else:
+                self.log(f"Successfully called {target}!", "success")
+                return 1
+        except Exception as e:
+            self.log(f"err: {e}", "error")
+            return 0
+
+s = Salti()
+s.power()
+
+while True:
+    target = input("Enter number: ")
+    if target == "exit":
+        break
+    s.call(target)
