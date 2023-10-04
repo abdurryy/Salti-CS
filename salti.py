@@ -12,7 +12,7 @@ class Salti:
         colorama.init()
         self.serial = serial.Serial('/dev/ttyS0',115200)
         self.serial.flushInput()
-        self.name = "Salti CS"
+        self.name = "[Salti CS]"
     
     def time(self):
         return colorama.Fore.WHITE +"["+ datetime.now().strftime("%H:%M:%S")+"] "
@@ -25,7 +25,7 @@ class Salti:
             color = colorama.Fore.GREEN
         elif type == "failure":
             color = colorama.Fore.LIGHTRED_EX
-        print(f"{self.time()}{colorama.Fore.LIGHTMAGENTA_EX}{self.name} | {color}{msg}")
+        print(f"{self.time()}{colorama.Fore.LIGHTMAGENTA_EX} {self.name} {color}{msg}{colorama.Fore.BLUE}")
 
     def power(self):
         self.log('Booting up')
@@ -37,24 +37,31 @@ class Salti:
         self.serial.flushInput()
         self.log('Finished booting up')
     
-    def call(self, target:str):
+    def call(self, target: str):
         try:
             self.log(f"Calling {target}...")
             rec_buff = ''
-            self.serial.write((f"ATD{target};"+'\r\n').encode())
-            time.sleep(10)
+            self.serial.write((f"ATD{target};" + '\r\n').encode())
+            time.sleep(20)
             if self.serial.inWaiting():
-                time.sleep(0.01 )
+                time.sleep(0.01)
                 rec_buff = self.serial.read(self.serial.inWaiting())
-            if "OK" not in rec_buff.decode():
-                self.log(f"failure: {rec_buff.decode()}", "failure")
-                return 0
+            
+            response = rec_buff.decode()
+            
+            if "OK" not in response:
+                self.log(f"Failure: {response}", "failure")
+                return False
+            elif "NO CARRIER" in response:
+                self.log(f"Call to {target} was not picked up.", "failure")
+                return False
             else:
                 self.log(f"Successfully called {target}!", "success")
-                return 1
+                return True
         except Exception as e:
-            self.log(f"err: {e}", "error")
-            return 0
+            self.log(f"Error: {e}", "error")
+            return False
+
 
 s = Salti()
 s.power()
