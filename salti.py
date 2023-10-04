@@ -27,15 +27,7 @@ class Salti:
             color = colorama.Fore.LIGHTRED_EX
         print(f"{self.time()}{colorama.Fore.LIGHTMAGENTA_EX} {self.name} {color}{msg}{colorama.Fore.BLUE}")
 
-    def power(self):
-        self.log('Booting up')
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        GPIO.setup(6,GPIO.OUT)
-        GPIO.output(6,GPIO.HIGH)
-        GPIO.output(6,GPIO.LOW)
-        self.serial.flushInput()
-        self.log('Finished booting up')
+    
     
     def call(self, target:str):
         try:
@@ -43,11 +35,12 @@ class Salti:
             rec_buff = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
             time.sleep(20)
-            if self.serial.inWaiting():
-                time.sleep(0.01 )
-                rec_buff = self.serial.read(self.serial.inWaiting())
-            if "OK" not in rec_buff.decode():
-                self.log(f"failure: {rec_buff.decode()}", "failure")
+            response = rec_buff.decode()
+            if "OK" not in response:
+                self.log(f"Failure: {response}", "failure")
+                return 0
+            elif "NO CARRIER" in response:
+                self.log(f"Call to {target} was not picked up.", "failure")
                 return 0
             else:
                 self.log(f"Successfully called {target}!", "success")
@@ -59,14 +52,33 @@ class Salti:
     def hangup(self):
         self.serial.write('AT+CHUP\r\n'.encode())
         self.log('Call disconnected')
+    
+    def off(self):
+        self.log('Shutting down')
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(6,GPIO.OUT)
+        GPIO.output(6,GPIO.HIGH)
+        GPIO.output(6,GPIO.LOW)
+        self.serial.flushInput()
+        self.log('Finished shutting down')
 
+    def on(self):
+        self.log('Booting up')
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(6,GPIO.OUT)
+        GPIO.output(6,GPIO.HIGH)
+        GPIO.output(6,GPIO.LOW)
+        self.serial.flushInput()
+        self.log('Finished booting up')
 
 s = Salti()
-s.power()
-s.hangup()
+s.on()
 while True:
     target = input("Enter number: ")
     if target == "exit":
+        s.off()
         break
     s.call(target)
     s.hangup()
