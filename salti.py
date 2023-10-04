@@ -39,8 +39,9 @@ class Salti:
     
     def call(self, target:str):
         try:
+            self.log(f"Calling {target}...")
             rec_buff = ''
-            self.serial.write(("AT+CHUP\r\n"+'\r\n').encode())
+            self.serial.write((f"ATD{target};"+'\r\n').encode())
             time.sleep(10)
             if self.serial.inWaiting():
                 time.sleep(0.01 )
