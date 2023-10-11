@@ -40,8 +40,8 @@ class Salti:
             self.inCall = True
             self.log(f"Calling {target}...")
             response = ''
-            self.serial.flushInput()
-            self.serial.write((f"ATD{target};"+'\r\n').encode())            
+            self.serial.write((f"ATD{target};"+'\r\n').encode())
+                        
             t = time.time()
 
             while True:
