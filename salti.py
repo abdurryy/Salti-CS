@@ -67,7 +67,8 @@ class Salti:
                 time.sleep(1)
                 response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
                 if "END" in response:
-                    self.log("Reciever ended call", "failure")  
+                    self.log("Reciever ended call", "failure")
+                    self.inCall = False
                     self.hangup()  
             except Exception as e:
                 self.log(f"err: {str(e)}", "error")
