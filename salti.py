@@ -31,13 +31,17 @@ class Salti:
 
     
     
-    def call(self, target:str):
+    def call(self, target:str, timeout:int=20):
         try:
             self.log(f"Calling {target}...")
             response = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
+            t = time.time()
             while True:
                 time.sleep(1)
+                if time.time() - t > timeout:
+                    self.log(f"Call to {target} timed out", "failure")
+                    return 0
                 if self.serial.inWaiting():
                     response = self.serial.read(self.serial.inWaiting()).decode()
                     if not "VOICE" in response:
