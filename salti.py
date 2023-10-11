@@ -38,6 +38,7 @@ class Salti:
             while True:
                 time.sleep(1)
                 if self.serial.inWaiting():
+                    time.sleep(5)
                     response = self.serial.read(self.serial.inWaiting()).decode()
                     if not "VOICE" in response:
                         continue
