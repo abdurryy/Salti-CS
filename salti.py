@@ -50,7 +50,11 @@ class Salti:
                     self.inCall = False
                     return 0
                 if self.serial.inWaiting():
-                    response = self.serial.read(self.serial.inWaiting()).decode()
+                    try:
+                        response = self.serial.read(self.serial.inWaiting()).decode()
+                    except Exception as e:
+                        self.log(f"err: {str(e)}", "error")
+                        continue
                     print(response)
                     if not "VOICE" in response:
                         continue
@@ -63,7 +67,7 @@ class Salti:
                         self.log(f"Call to {target} successful", "success")
                         return 1
         except Exception as e:
-            self.log(f"err: {str(e)}", "error")
+            self.log(f"call err: {str(e)}", "error")
             return 0
     
     def background(self):
