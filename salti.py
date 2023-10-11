@@ -63,8 +63,8 @@ class Salti:
                         self.log(f"Call to {target} successful", "success")
                         return 1
         except Exception as e:
+            self.log(f"err: {str(e)}", "error")
             return 0
-            # self.log(f"err: {str(e)}", "error")
     
     def background(self):
         while True:
