@@ -14,6 +14,7 @@ class Salti:
         self.serial = serial.Serial('/dev/ttyS0',115200)
         self.serial.flushInput()
         self.name = "[Salti CS]"
+        self.inCall = False
     
     def time(self):
         return colorama.Fore.WHITE +"["+ datetime.now().strftime("%H:%M:%S")+"] "
@@ -47,6 +48,7 @@ class Salti:
                         self.log(f"Call to {target} failed", "failure")
                         return 0
                     else:
+                        self.inCall = True
                         self.log(f"Call to {target} successful", "success")
                         return 1
         except Exception as e:
@@ -54,19 +56,20 @@ class Salti:
             return 0
     
     def background(self):
-        try:
-            while True:
+        while True:
+            try:
                 time.sleep(1)
                 response = self.serial.read(self.serial.inWaiting()).decode()
                 if "END" in response:
                     self.log("Reciever ended call", "failure")  
                     self.hangup()  
-        except Exception as e:
-            self.log(f"err: {str(e)}", "error")
+            except Exception as e:
+                self.log(f"err: {str(e)}", "error")
 
     def hangup(self):
         self.serial.write('AT+CHUP\r\n'.encode())
         self.log('Call disconnected')
+        self.inCall = False
     
     def off(self):
         self.log('Shutting down')
@@ -90,10 +93,12 @@ class Salti:
 
 s = Salti()
 s.on()
+threading.Thread(target=s.background).start()
 while True:
+    if s.inCall:
+        continue
     target = input("Enter number: ")
     if target == "exit":
         s.off()
         break
     s.call(target)
-    threading.Thread(target=s.background).start()
