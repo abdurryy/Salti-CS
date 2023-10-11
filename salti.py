@@ -42,6 +42,7 @@ class Salti:
             response = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
             t = time.time()
+            self.serial.flushInput()
 
             while True:
                 time.sleep(1)
@@ -108,6 +109,7 @@ threading.Thread(target=s.background).start()
 while True:
     time.sleep(1)
     if not s.inCall:
+        s.serial.flyshInput()
         target = input("Enter number: ")
         if target == "exit":
             s.off()
