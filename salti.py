@@ -51,7 +51,7 @@ class Salti:
                     return 0
                 if self.serial.inWaiting():
                     try:
-                        response = self.serial.read(self.serial.inWaiting()).decode()
+                        response = self.serial.read(self.serial.inWaiting()).decode("utf-8", errors="ignore")
                     except Exception as e:
                         self.log(f"err!!: {str(e)}", "error")
                         continue
