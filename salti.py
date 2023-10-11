@@ -36,11 +36,13 @@ class Salti:
             if self.inCall:
                 self.log("Already in call", "error")
                 return 0
+            
             self.inCall = True
             self.log(f"Calling {target}...")
             response = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
             t = time.time()
+
             while True:
                 time.sleep(1)
                 if time.time() - t > timeout:
@@ -49,6 +51,7 @@ class Salti:
                     return 0
                 if self.serial.inWaiting():
                     response = self.serial.read(self.serial.inWaiting()).decode()
+                    print(response)
                     if not "VOICE" in response:
                         continue
                     if "END" in response:
