@@ -38,8 +38,9 @@ class Salti:
                 time.sleep(1)
                 if self.serial.inWaiting():
                     response = self.serial.read(self.serial.inWaiting()).decode()
+                    if not "VOICE" in response:
+                        continue 
                     print("Call response: " + response)
-                    
                     if "000012" in response or "000001" in response:
                         self.log(f"Call to {target} failed", "failure")
                         return 0
