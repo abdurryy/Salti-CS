@@ -40,8 +40,8 @@ class Salti:
                 if self.serial.inWaiting():
                     response = self.serial.read(self.serial.inWaiting()).decode()
                     if not "VOICE" in response:
-                        continue 
-                    if "000012" in response or "000001" in response:
+                        continue
+                    if "END" in response:
                         self.log(f"Call to {target} failed", "failure")
                         return 0
                     else:
