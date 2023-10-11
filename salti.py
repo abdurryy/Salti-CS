@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 import colorama
 import time
 import serial
+import threading
 
 class Salti:
     def __init__(self):
@@ -40,7 +41,6 @@ class Salti:
                     response = self.serial.read(self.serial.inWaiting()).decode()
                     if not "VOICE" in response:
                         continue 
-                    print("Call response: " + response)
                     if "000012" in response or "000001" in response:
                         self.log(f"Call to {target} failed", "failure")
                         return 0
@@ -50,6 +50,17 @@ class Salti:
         except Exception as e:
             self.log(f"err: {str(e)}", "error")
             return 0
+    
+    def background(self):
+        try:
+            while True:
+                time.sleep(1)
+                response = self.serial.read(self.serial.inWaiting()).decode()
+                if "END" in response:
+                    self.log("Reciever ended call", "failure")  
+                    self.hangup()  
+        except Exception as e:
+            self.log(f"err: {str(e)}", "error")
 
     def hangup(self):
         self.serial.write('AT+CHUP\r\n'.encode())
@@ -83,4 +94,4 @@ while True:
         s.off()
         break
     s.call(target)
-    s.hangup()
+    threading.Thread(target=s.background).start()
