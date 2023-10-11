@@ -109,7 +109,7 @@ threading.Thread(target=s.background).start()
 while True:
     time.sleep(1)
     if not s.inCall:
-        s.serial.flyshInput()
+        s.serial.flushInput()
         target = input("Enter number: ")
         if target == "exit":
             s.off()
