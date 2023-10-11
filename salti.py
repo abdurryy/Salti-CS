@@ -41,6 +41,7 @@ class Salti:
                     response = self.serial.read(self.serial.inWaiting()).decode()
                     if not "VOICE" in response:
                         continue
+                    print(response)
                     if "END" in response:
                         self.log(f"Call to {target} failed", "failure")
                         return 0
