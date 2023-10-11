@@ -41,8 +41,9 @@ class Salti:
             self.log(f"Calling {target}...")
             response = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
+            print(1)
+            print(self.serial.read(self.serial.inWaiting()).decode())
             t = time.time()
-            self.serial.flushInput()
 
             while True:
                 time.sleep(1)
@@ -51,7 +52,7 @@ class Salti:
                     self.inCall = False
                     return 0
                 if self.serial.inWaiting():
-                    response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
+                    response = self.serial.read(self.serial.inWaiting()).decode()
                     print(response)
                     if not "VOICE" in response:
                         continue
@@ -109,7 +110,6 @@ threading.Thread(target=s.background).start()
 while True:
     time.sleep(1)
     if not s.inCall:
-        s.serial.flushInput()
         target = input("Enter number: ")
         if target == "exit":
             s.off()
