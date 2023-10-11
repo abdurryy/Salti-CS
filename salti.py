@@ -34,21 +34,18 @@ class Salti:
             self.log(f"Calling {target}...")
             rec_buff = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
-            time.sleep(20)
+            time.sleep(5)
             if self.serial.inWaiting():
                 time.sleep(0.01 )
                 rec_buff = self.serial.read(self.serial.inWaiting())
             response = rec_buff.decode()
             print("Call response: " + response)
             
-            if "NO CARRIER" in response:
-                self.log(f"Call to {target} was not picked up.", "failure")
-                return 0
-            elif "OK" not in response:
-                self.log(f"Failure: {response}", "failure")
+            if "000012" in response or "000001" in response:
+                self.log(f"Call to {target} failed", "failure")
                 return 0
             else:
-                self.log(f"Successfully called {target}!", "success")
+                self.log(f"Call to {target} successful", "success")
                 return 1
         except Exception as e:
             self.log(f"err: {str(e)}", "error")
