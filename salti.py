@@ -39,7 +39,6 @@ class Salti:
             while True:
                 time.sleep(1)
                 if self.serial.inWaiting():
-                    time.sleep(5)
                     response = self.serial.read(self.serial.inWaiting()).decode()
                     if not "VOICE" in response:
                         continue
@@ -95,10 +94,11 @@ s = Salti()
 s.on()
 threading.Thread(target=s.background).start()
 while True:
-    if s.inCall:
-        continue
-    target = input("Enter number: ")
-    if target == "exit":
-        s.off()
-        break
-    s.call(target)
+    time.sleep(1)
+    print("status", s.inCall)
+    if not s.inCall:
+        target = input("Enter number: ")
+        if target == "exit":
+            s.off()
+            break
+        s.call(target)
