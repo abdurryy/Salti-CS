@@ -35,7 +35,8 @@ class Salti:
             rec_buff = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
             time.sleep(20)
-            response = rec_buff.decode()
+            response = rec_buff
+            print("Call response: " + response)
             if "OK" not in response:
                 self.log(f"Failure: {response}", "failure")
                 return 0
