@@ -50,7 +50,7 @@ class Salti:
                     self.inCall = False
                     return 0
                 if self.serial.inWaiting():
-                    response = self.serial.read(self.serial.inWaiting()).decode("utf-8", errors="ignore")
+                    response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
                     print(response)
                     if not "VOICE" in response:
                         continue
@@ -70,7 +70,7 @@ class Salti:
         while True:
             try:
                 time.sleep(1)
-                response = self.serial.read(self.serial.inWaiting()).decode("utf-8", errors="ignore")
+                response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
                 if "END" in response:
                     self.log("Reciever ended call", "failure")  
                     self.hangup()  
