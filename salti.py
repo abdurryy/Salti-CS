@@ -32,21 +32,20 @@ class Salti:
     def call(self, target:str):
         try:
             self.log(f"Calling {target}...")
-            rec_buff = ''
+            response = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
-            time.sleep(5)
-            if self.serial.inWaiting():
-                time.sleep(0.01 )
-                rec_buff = self.serial.read(self.serial.inWaiting())
-            response = rec_buff.decode()
-            print("Call response: " + response)
-            
-            if "000012" in response or "000001" in response:
-                self.log(f"Call to {target} failed", "failure")
-                return 0
-            else:
-                self.log(f"Call to {target} successful", "success")
-                return 1
+            while True:
+                time.sleep(1)
+                if self.serial.inWaiting():
+                    response = self.serial.read(self.serial.inWaiting()).decode()
+                    print("Call response: " + response)
+                    
+                    if "000012" in response or "000001" in response:
+                        self.log(f"Call to {target} failed", "failure")
+                        return 0
+                    else:
+                        self.log(f"Call to {target} successful", "success")
+                        return 1
         except Exception as e:
             self.log(f"err: {str(e)}", "error")
             return 0
