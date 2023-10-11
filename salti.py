@@ -53,7 +53,7 @@ class Salti:
                     try:
                         response = self.serial.read(self.serial.inWaiting()).decode()
                     except Exception as e:
-                        self.log(f"err: {str(e)}", "error")
+                        self.log(f"err!!: {str(e)}", "error")
                         continue
                     print(response)
                     if not "VOICE" in response:
