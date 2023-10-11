@@ -89,6 +89,7 @@ class Salti:
 
     def on(self):
         self.log('Booting up')
+        time.sleep(5)
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(6,GPIO.OUT)
