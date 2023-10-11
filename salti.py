@@ -43,6 +43,7 @@ class Salti:
             self.serial.write((f"ATD{target};"+'\r\n').encode())
 
             while True:
+                time.sleep(3)
                 if self.serial.inWaiting():
                     response = self.serial.read(self.serial.inWaiting()).decode()
                     print(response)
