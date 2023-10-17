@@ -188,7 +188,6 @@ while True:
         if target == "exit":
             s.off()
             break
-        if s.call(target) == 0:
-            s.log("Call failed", "failure")
-            s.hangup()
-            s.off()
+        s.log("Call failed", "failure")
+        s.hangup()
+        s.off()
