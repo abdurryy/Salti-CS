@@ -167,6 +167,7 @@ class Salti:
         time.sleep(2)
         GPIO.output(6, GPIO.LOW)
         self.serial.flushInput()
+        time.sleep(5)
         self.log('Finished shutting down')
 
     def on(self):
@@ -177,6 +178,7 @@ class Salti:
         GPIO.output(6,GPIO.HIGH)
         GPIO.output(6,GPIO.LOW)
         self.serial.flushInput()
+        time.sleep(5)
         self.log('Finished booting up')
 
 s = Salti()
