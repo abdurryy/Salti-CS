@@ -1,0 +1,52 @@
+
+body {
+    background-color: rgb(8, 8, 8);
+    font-family: 'Roboto', sans-serif;
+    color: #9AE19D;
+    margin: 0;
+    padding: 0;
+}
+
+*:hover  {
+    outline: none;
+}
+
+#intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+#intro #input input {
+    background-color: #474A48;
+    padding: 7px;
+    border: 0;
+    border-radius: 10px;
+}
+
+#intro #input button {
+    padding: 7;
+    border-radius: 10px;
+    border: 0;
+    background-color: #58ff90;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-weight: 700;
+}
+
+#intro #input button:hover {
+    background-color: #58ff90;
+    opacity: 0.7;
+    /*transition*/
+    transition: 0.5s;
+}
+
+#intro #input p {
+    margin-top: 20px;
+    font-size: 12px;
+    opacity: 0.7;
+    
+}
