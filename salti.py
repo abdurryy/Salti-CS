@@ -42,6 +42,8 @@ class Salti:
         self.serial.write((f"ATD{target};"+'\r\n').encode())
                     
         t = time.time()
+        waiting = self.serial.inWaiting()
+        print(str(waiting) + " waiting")
         if self.serial.inWaiting():
             while True:
                 time.sleep(2)
@@ -50,8 +52,7 @@ class Salti:
                     self.inCall = False
                     return 0
                 
-                waiting = self.serial.inWaiting()
-                print(str(waiting) + " waiting")
+                
                 response = self.serial.read(self.serial.inWaiting()).decode()
                 print(self.serial.inWaiting())
                 print(response)
@@ -113,4 +114,4 @@ while True:
         if target == "exit":
             s.off()
             break
-        s.call(target)
+        print(s.call(target))
