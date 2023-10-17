@@ -173,8 +173,8 @@ while True:
             break
         if s.call(target) == 1:
             s.log("Call successful", "success")
+            s.hangup()
         else:
             s.log("Call failed", "failure")
-        s.hangup()
         s.off()
         break
