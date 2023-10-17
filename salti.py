@@ -32,41 +32,38 @@ class Salti:
     
     
     def call(self, target:str, timeout:int=20):
-        try:
-            if self.inCall:
-                self.log("Already in call", "error")
-                return 0
-            
-            self.inCall = True
-            self.log(f"Calling {target}...")
-            response = ''
-            self.serial.write((f"ATD{target};"+'\r\n').encode())
-                        
-            t = time.time()
-
-            while True:
-                time.sleep(1)
-                if time.time() - t > timeout:
-                    self.log(f"Call to {target} timed out", "failure")
-                    self.inCall = False
-                    return 0
-                if self.serial.inWaiting():
-                    response = self.serial.read(self.serial.inWaiting()).decode()
-                    print(self.serial.inWaiting())
-                    print(response)
-                    if not "VOICE" in response:
-                        continue
-                    if "END" in response:
-                        self.inCall = False
-                        self.log(f"Call to {target} failed", "failure")
-                        return 0
-                    else:
-                        self.inCall = True
-                        self.log(f"Call to {target} successful", "success")
-                        return 1
-        except Exception as e:
-            self.log(f"call err: {str(e)}", "error")
+        if self.inCall:
+            self.log("Already in call", "error")
             return 0
+        
+        self.inCall = True
+        self.log(f"Calling {target}...")
+        response = ''
+        self.serial.write((f"ATD{target};"+'\r\n').encode())
+                    
+        t = time.time()
+
+        while True:
+            time.sleep(1)
+            if time.time() - t > timeout:
+                self.log(f"Call to {target} timed out", "failure")
+                self.inCall = False
+                return 0
+            if self.serial.inWaiting():
+                response = self.serial.read(self.serial.inWaiting()).decode()
+                print(self.serial.inWaiting())
+                print(response)
+                if not "VOICE" in response:
+                    continue
+                if "END" in response:
+                    self.inCall = False
+                    self.log(f"Call to {target} failed", "failure")
+                    return 0
+                else:
+                    self.inCall = True
+                    self.log(f"Call to {target} successful", "success")
+                    return 1
+
     
     def background(self):
         while True:
