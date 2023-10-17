@@ -83,18 +83,24 @@ class Salti:
                         print(f"{bytes_recieved} bytes recieved")
                         response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
                         print(f"extra: {response}")
+                        if "NO CARRIER" in response:
+                            self.call_dict["status"] = 3
+                            self.inCall = False
+                            self.log(f"Call to {target} failed due to no carrier.", "failure")
+                            break
+                        elif "END" in response:
+                            self.call_dict["status"] = 3
+                            self.inCall = False
+                            self.log(f"Call to {target} failed due to end.", "failure")
+                            break
+                        else:
+                            self.log(f"Extra response: {response}")
+                        
+                        break
+
 
                     return 1
-                elif "NO CARRIER" in response:
-                    self.call_dict["status"] = 3
-                    self.inCall = False
-                    self.log(f"Call to {target} failed due to no carrier.", "failure")
-                    break
-                elif "END" in response:
-                    self.call_dict["status"] = 3
-                    self.inCall = False
-                    self.log(f"Call to {target} failed due to end.", "failure")
-                    break
+                
             return 0
         except Exception as e:
             self.log(f"err: {str(e)}", "error")
