@@ -52,7 +52,7 @@ class Salti:
                     return 0
                 if self.serial.inWaiting():
                     response = self.serial.read(self.serial.inWaiting()).decode()
-
+                    print(self.serial.inWaiting())
                     print(response)
                     if not "VOICE" in response:
                         continue
