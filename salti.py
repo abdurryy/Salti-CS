@@ -77,6 +77,7 @@ class Salti:
                         if str(bytes_recieved) == "0":
                             self.log("[RESP 22] no extra...")
                             continue
+                        time.sleep(2)
                         print(f"{bytes_recieved} bytes recieved")
                         response = self.serial.read(self.serial.inWaiting())
                         print(f"b: {response}")
