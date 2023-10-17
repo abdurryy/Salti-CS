@@ -42,27 +42,27 @@ class Salti:
         self.serial.write((f"ATD{target};"+'\r\n').encode())
                     
         t = time.time()
-
-        while True:
-            time.sleep(1)
-            if time.time() - t > timeout:
-                self.log(f"Call to {target} timed out", "failure")
-                self.inCall = False
-                return 0
-            if self.serial.inWaiting():
-                response = self.serial.read(self.serial.inWaiting()).decode()
-                print(self.serial.inWaiting())
-                print(response)
-                if not "VOICE" in response:
-                    continue
-                if "END" in response:
+        if self.serial.inWaiting():
+            while True:
+                time.sleep(1)
+                if time.time() - t > timeout:
+                    self.log(f"Call to {target} timed out", "failure")
                     self.inCall = False
-                    self.log(f"Call to {target} failed", "failure")
                     return 0
-                else:
-                    self.inCall = True
-                    self.log(f"Call to {target} successful", "success")
-                    return 1
+                
+                    response = self.serial.read(self.serial.inWaiting()).decode()
+                    print(self.serial.inWaiting())
+                    print(response)
+                    if not "VOICE" in response:
+                        continue
+                    if "END" in response:
+                        self.inCall = False
+                        self.log(f"Call to {target} failed", "failure")
+                        return 0
+                    else:
+                        self.inCall = True
+                        self.log(f"Call to {target} successful", "success")
+                        return 1
 
     
     def background(self):
