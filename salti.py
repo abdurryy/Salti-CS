@@ -50,6 +50,8 @@ class Salti:
                     self.inCall = False
                     return 0
                 
+                waiting = self.serial.inWaiting()
+                print(str(waiting) + " waiting")
                 response = self.serial.read(self.serial.inWaiting()).decode()
                 print(self.serial.inWaiting())
                 print(response)
