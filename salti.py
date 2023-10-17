@@ -39,7 +39,6 @@ class Salti:
             time.sleep(2)
             print(str(self.serial.inWaiting())+" bytes recieved")
             response = self.serial.read(self.serial.inWaiting()).decode()
-            print(response)
             if "OK" in response:
                 self.log(f"Calling {target}, waiting for response...", "success")
                 break
@@ -54,7 +53,7 @@ class Salti:
                 continue
             time.sleep(2)
             print(str(self.serial.inWaiting())+" bytes recieved")
-            response = self.serial.read(self.serial.inWaiting()).decode()
+            response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
             print(response)
         return 1
     
