@@ -78,7 +78,10 @@ class Salti:
                             self.log("[RESP 22] no extra...")
                             continue
                         print(f"{bytes_recieved} bytes recieved")
-                        response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
+                        response = self.serial.read(self.serial.inWaiting())
+                        print(f"b: {response}")
+                        response = str(response.decode("utf-8"))
+
                         print(f"extra: {response}")
                         if "NO CARRIER" in response:
                             self.call_dict["status"] = 3
