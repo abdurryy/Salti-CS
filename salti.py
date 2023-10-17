@@ -80,9 +80,9 @@ class Salti:
                         if str(bytes_recieved) == "0":
                             self.log("[RESP 22] no extra...")
                             continue
-                        print(str(bytes_recieved)+" bytes recieved")
+                        print(f"{bytes_recieved} bytes recieved")
                         response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
-                        print("extra;"+response)
+                        print(f"extra: {response}")
 
                     return 1
                 elif "NO CARRIER" in response:
