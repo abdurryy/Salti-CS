@@ -35,7 +35,6 @@ class Salti:
                 time.sleep(1)
                 bytes_recieved = self.serial.inWaiting()
                 if str(bytes_recieved) == "0":
-                    self.log("[INIT] No response from server. Waiting...")
                     continue
                 print(str(self.serial.inWaiting())+" bytes recieved")
                 response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
@@ -44,10 +43,14 @@ class Salti:
                     self.inCall = False
                     self.log(f"Call to {target} failed due to error.", "failure")
                     break
-                if "OK" in response:
+                elif "OK" in response:
                     self.call_dict["status"] = 1
                     self.log(f"Calling {target}, waiting for response...", "success")
                     return 1
+                else:
+                    self.call_dict["status"] = 3
+                    self.inCall = False
+                    self.log(f"Call to {target} failed due to no OK.", "failure")
             return 0
         except Exception as e:
             self.log(f"err: {str(e)}", "error")
@@ -59,22 +62,16 @@ class Salti:
                 time.sleep(1)
                 bytes_recieved = self.serial.inWaiting()
                 if str(bytes_recieved) == "0":
-                    self.log("[RESP] No response from server. Waiting...")
                     continue
 
-                print(str(self.serial.inWaiting())+" bytes recieved")
                 time.sleep(2)
-                
-                response = self.serial.read(self.serial.inWaiting())
-                print("before:" + str(response))
-                response = str(response.decode("utf-8"))
-                print("after:" + response)
+                response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
                 
 
                 if "BEGIN" in response:
                     self.call_dict["status"] = 2
                     self.log(f"Call to {target} successful", "success")
-                    for i in range(40):
+                    for i in range(15):
                         time.sleep(1)
                         bytes_recieved = self.serial.inWaiting()
                         if str(bytes_recieved) == "0":
@@ -87,20 +84,18 @@ class Salti:
                             self.call_dict["status"] = 3
                             self.inCall = False
                             self.log(f"Call to {target} failed due to no carrier.", "failure")
-                            break
+                            return 0
                         elif "END" in response:
                             self.call_dict["status"] = 3
                             self.inCall = False
                             self.log(f"Call to {target} failed due to end.", "failure")
-                            break
-                        else:
-                            self.log(f"Extra response: {response}")
-                            break
-
-
+                            return 0
                     return 1
-                
-            return 0
+                else:
+                    self.call_dict["status"] = 3
+                    self.inCall = False
+                    self.log(f"Call to {target} failed due to no begin.", "failure")
+                    return 0
         except Exception as e:
             self.log(f"err: {str(e)}", "error")
             return 0
