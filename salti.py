@@ -36,7 +36,9 @@ class Salti:
             if str(bytes_recieved) == "0":
                 self.log("No response from server. Waiting...")
                 continue
+            time.sleep(2)
             response = self.serial.read(self.serial.inWaiting()).decode()
+            print(response)
             if "OK" in response:
                 self.log(f"Calling {target}, waiting for response...", "success")
                 break
@@ -47,8 +49,9 @@ class Salti:
             time.sleep(1)
             bytes_recieved = self.serial.inWaiting()
             if str(bytes_recieved) == "0":
-                self.log("2 No response from server. Waiting...")
+                self.log("No response from server. Waiting...")
                 continue
+            time.sleep(2)
             response = self.serial.read(self.serial.inWaiting()).decode()
             print(response)
         return 1
