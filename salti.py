@@ -76,9 +76,11 @@ class Salti:
                     self.log(f"Call to {target} successful", "success")
                     for i in range(40):
                         time.sleep(1)
+                        bytes_recieved = self.serial.inWaiting()
                         if str(bytes_recieved) == "0":
                             self.log("[RESP 22] no extra...")
                             continue
+                        print(bytes_recieved+" bytes recieved")
                         response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
                         print("extra;"+response)
 
