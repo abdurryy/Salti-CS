@@ -36,12 +36,8 @@ class Salti:
             if str(bytes_recieved) == "0":
                 self.log("[INIT] No response from server. Waiting...")
                 continue
-            time.sleep(10)
             print(str(self.serial.inWaiting())+" bytes recieved")
-            response = self.serial.read(self.serial.inWaiting())
-            print("before:" + str(response))
-            response = str(response.decode("utf-8"))
-            print("after:" + response)
+            response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
             if "ERROR" in response:
                 self.call_dict["status"] = 3
                 self.inCall = False
@@ -60,9 +56,15 @@ class Salti:
             if str(bytes_recieved) == "0":
                 self.log("[RESP] No response from server. Waiting...")
                 continue
-            time.sleep(5)
+
             print(str(self.serial.inWaiting())+" bytes recieved")
-            response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
+            time.sleep(10)
+            
+            response = self.serial.read(self.serial.inWaiting())
+            print("before:" + str(response))
+            response = str(response.decode("utf-8"))
+            print("after:" + response)
+            
 
             if "BEGIN" in response:
                 self.call_dict["status"] = 2
