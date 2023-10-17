@@ -162,9 +162,10 @@ class Salti:
         self.log('Shutting down')
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        GPIO.setup(6,GPIO.OUT)
-        GPIO.output(6,GPIO.HIGH)
-        GPIO.output(6,GPIO.LOW)
+        GPIO.setup(6, GPIO.OUT)
+        GPIO.output(6, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(6, GPIO.LOW)
         self.serial.flushInput()
         self.log('Finished shutting down')
 
