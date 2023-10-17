@@ -34,7 +34,7 @@ class Salti:
             time.sleep(1)
             bytes_recieved = self.serial.inWaiting()
             if str(bytes_recieved) == "0":
-                self.log("No response from server. Waiting...")
+                self.log("[INIT] No response from server. Waiting...")
                 continue
             time.sleep(2)
             print(str(self.serial.inWaiting())+" bytes recieved")
@@ -50,7 +50,7 @@ class Salti:
             time.sleep(1)
             bytes_recieved = self.serial.inWaiting()
             if str(bytes_recieved) == "0":
-                self.log("No response from server. Waiting...")
+                self.log("[RESP] No response from server. Waiting...")
                 continue
             time.sleep(2)
             print(str(self.serial.inWaiting())+" bytes recieved")
