@@ -40,6 +40,7 @@ class Salti:
             print(str(self.serial.inWaiting())+" bytes recieved")
             response = self.serial.read(self.serial.inWaiting()).decode()
             if "OK" in response:
+                self.call_dict["status"] = 1
                 self.log(f"Calling {target}, waiting for response...", "success")
                 break
         return 1
@@ -53,8 +54,20 @@ class Salti:
                 continue
             time.sleep(2)
             print(str(self.serial.inWaiting())+" bytes recieved")
-            response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
-            print(response)
+            response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
+
+            if "BEGIN" in response:
+                self.call_dict["status"] = 2
+                self.log(f"Call to {target} successful", "success")
+                break
+            elif "NO CARRIER" in response:
+                self.call_dict["status"] = 3
+                self.log(f"Call to {target} failed due to no carrier.", "failure")
+                break
+            elif "END" in response:
+                self.call_dict["status"] = 3
+                self.log(f"Call to {target} failed due to end.", "failure")
+                break
         return 1
     
     
@@ -70,7 +83,7 @@ class Salti:
                     
         t = time.time()
         self.call_dict = {
-            "status": 0, # 0 = not called, 1 = called, 2 = call accepted
+            "status": 0, # 0 = not called, 1 = called, 2 = call accepted, 3 = call ended
             "number": target
         }
 
