@@ -15,6 +15,10 @@ class Salti:
         self.serial.flushInput()
         self.name = "[Salti CS]"
         self.inCall = False
+        self.call_dict = {
+            "status": -1, # 0 = not called, 1 = called, 2 = call accepted, 3 = call ended
+            "number": ""
+        }
     
     def time(self):
         return colorama.Fore.WHITE +"["+ datetime.now().strftime("%H:%M:%S")+"] "
