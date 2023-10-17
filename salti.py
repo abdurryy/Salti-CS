@@ -74,6 +74,14 @@ class Salti:
                 if "BEGIN" in response:
                     self.call_dict["status"] = 2
                     self.log(f"Call to {target} successful", "success")
+                    for i in range(40):
+                        time.sleep(1)
+                        if str(bytes_recieved) == "0":
+                            self.log("[RESP 22] no extra...")
+                            continue
+                        response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
+                        print("extra;"+response)
+
                     return 1
                 elif "NO CARRIER" in response:
                     self.call_dict["status"] = 3
