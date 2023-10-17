@@ -58,7 +58,7 @@ class Salti:
                 continue
 
             print(str(self.serial.inWaiting())+" bytes recieved")
-            time.sleep(10)
+            time.sleep(2)
             
             response = self.serial.read(self.serial.inWaiting())
             print("before:" + str(response))
