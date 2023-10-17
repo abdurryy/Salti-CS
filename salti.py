@@ -95,8 +95,7 @@ class Salti:
                             break
                         else:
                             self.log(f"Extra response: {response}")
-                        
-                        break
+                            break
 
 
                     return 1
