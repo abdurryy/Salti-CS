@@ -40,6 +40,11 @@ class Salti:
             print(str(self.serial.inWaiting())+" bytes recieved")
             response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
             print(response)
+            if "ERROR" in response:
+                self.call_dict["status"] = 3
+                self.inCall = False
+                self.log(f"Call to {target} failed due to error.", "failure")
+                break
             if "OK" in response:
                 self.call_dict["status"] = 1
                 self.log(f"Calling {target}, waiting for response...", "success")
@@ -83,7 +88,7 @@ class Salti:
         self.inCall = True
         self.log(f"Calling {target}...")
         response = ''
-        self.serial.write(b'ATD"'+target.encode() +b';"\r')
+        self.serial.write(f'ATD{target};\r\n')
                     
         t = time.time()
         self.call_dict = {
