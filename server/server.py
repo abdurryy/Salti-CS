@@ -1,5 +1,6 @@
 from salti import Salti
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import uvicorn
 import socket
@@ -7,6 +8,16 @@ import socket
 app = FastAPI()
 salti_manager = Salti()
 salti_manager.on()
+
+origins = ["http://localhost:3000"]  # Add your client's origin
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Specify allowed HTTP methods
+    allow_headers=["*"],  # Specify allowed HTTP headers
+)
 
 @app.get("/")
 def root():
