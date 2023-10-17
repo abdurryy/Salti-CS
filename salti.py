@@ -36,7 +36,6 @@ class Salti:
                 bytes_recieved = self.serial.inWaiting()
                 if str(bytes_recieved) == "0":
                     continue
-                print(str(self.serial.inWaiting())+" bytes recieved")
                 response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
                 if "ERROR" in response:
                     self.call_dict["status"] = 3
@@ -75,15 +74,9 @@ class Salti:
                         time.sleep(1)
                         bytes_recieved = self.serial.inWaiting()
                         if str(bytes_recieved) == "0":
-                            self.log("[RESP 22] no extra...")
                             continue
                         time.sleep(2)
-                        print(f"{bytes_recieved} bytes recieved")
-                        response = self.serial.read(self.serial.inWaiting())
-                        print(f"b: {response}")
-                        response = str(response.decode("utf-8"))
-
-                        print(f"extra: {response}")
+                        response = str(self.serial.read(self.serial.inWaiting().decode("utf-8")))
                         if "NO CARRIER" in response:
                             self.call_dict["status"] = 3
                             self.inCall = False
