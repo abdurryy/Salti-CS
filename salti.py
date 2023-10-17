@@ -55,6 +55,7 @@ class Salti:
                     if first_time:
                         time.sleep(10)
                         first_time = False
+                        continue
                     response = self.serial.read(self.serial.inWaiting()).decode()
 
                     print(response)
