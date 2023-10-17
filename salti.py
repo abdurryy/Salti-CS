@@ -45,17 +45,12 @@ class Salti:
             t = time.time()
 
             while True:
-                first_time = True
                 time.sleep(1)
                 if time.time() - t > timeout:
                     self.log(f"Call to {target} timed out", "failure")
                     self.inCall = False
                     return 0
                 if self.serial.inWaiting():
-                    if first_time:
-                        time.sleep(10)
-                        first_time = False
-                        continue
                     response = self.serial.read(self.serial.inWaiting()).decode()
 
                     print(response)
