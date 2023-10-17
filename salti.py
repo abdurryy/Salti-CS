@@ -41,11 +41,18 @@ class Salti:
             self.log(f"Calling {target}...")
             response = ''
             self.serial.write((f"ATD{target};"+'\r\n').encode())
+                        
+            t = time.time()
 
             while True:
-                time.sleep(3)
+                time.sleep(1)
+                if time.time() - t > timeout:
+                    self.log(f"Call to {target} timed out", "failure")
+                    self.inCall = False
+                    return 0
                 if self.serial.inWaiting():
                     response = self.serial.read(self.serial.inWaiting()).decode()
+
                     print(response)
                     if not "VOICE" in response:
                         continue
@@ -67,8 +74,7 @@ class Salti:
                 time.sleep(1)
                 response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
                 if "END" in response:
-                    self.log("Reciever ended call", "failure")
-                    self.inCall = False
+                    self.log("Reciever ended call", "failure")  
                     self.hangup()  
             except Exception as e:
                 self.log(f"err: {str(e)}", "error")
@@ -93,7 +99,6 @@ class Salti:
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(6,GPIO.OUT)
-        time.sleep(5)
         GPIO.output(6,GPIO.HIGH)
         GPIO.output(6,GPIO.LOW)
         self.serial.flushInput()
@@ -101,7 +106,7 @@ class Salti:
 
 s = Salti()
 s.on()
-threading.Thread(target=s.background).start()
+#threading.Thread(target=s.background).start()
 while True:
     time.sleep(1)
     if not s.inCall:
