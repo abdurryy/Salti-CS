@@ -165,20 +165,3 @@ class Salti:
         time.sleep(5)
         self.log('Finished booting up')
 
-s = Salti()
-s.on()
-#threading.Thread(target=s.background).start()
-while True:
-    time.sleep(1)
-    if not s.inCall:
-        target = input("Enter number: ")
-        if target == "exit":
-            s.off()
-            break
-        if s.call(target) == 1:
-            s.log("Call successful", "success")
-            s.hangup()
-        else:
-            s.log("Call failed", "failure")
-        s.off()
-        break
