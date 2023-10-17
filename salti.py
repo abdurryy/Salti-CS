@@ -82,7 +82,7 @@ class Salti:
         self.inCall = True
         self.log(f"Calling {target}...")
         response = ''
-        self.serial.write((f"ATD{target};"+'\r\n').encode())
+        self.serial.write(b'ATD"'+target.encode() +b';"\r')
                     
         t = time.time()
         self.call_dict = {
