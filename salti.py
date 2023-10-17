@@ -30,57 +30,65 @@ class Salti:
         print(f"{self.time()}{colorama.Fore.LIGHTMAGENTA_EX} {self.name} {color}{msg}{colorama.Fore.BLUE}")
 
     def init_call(self):
-        while True:
-            time.sleep(1)
-            bytes_recieved = self.serial.inWaiting()
-            if str(bytes_recieved) == "0":
-                self.log("[INIT] No response from server. Waiting...")
-                continue
-            print(str(self.serial.inWaiting())+" bytes recieved")
-            response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
-            if "ERROR" in response:
-                self.call_dict["status"] = 3
-                self.inCall = False
-                self.log(f"Call to {target} failed due to error.", "failure")
-                break
-            if "OK" in response:
-                self.call_dict["status"] = 1
-                self.log(f"Calling {target}, waiting for response...", "success")
-                break
-        return 1
+        try:
+            while True:
+                time.sleep(1)
+                bytes_recieved = self.serial.inWaiting()
+                if str(bytes_recieved) == "0":
+                    self.log("[INIT] No response from server. Waiting...")
+                    continue
+                print(str(self.serial.inWaiting())+" bytes recieved")
+                response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
+                if "ERROR" in response:
+                    self.call_dict["status"] = 3
+                    self.inCall = False
+                    self.log(f"Call to {target} failed due to error.", "failure")
+                    break
+                if "OK" in response:
+                    self.call_dict["status"] = 1
+                    self.log(f"Calling {target}, waiting for response...", "success")
+                    return 1
+            return 0
+        except Exception as e:
+            self.log(f"err: {str(e)}", "error")
+            return 0
     
     def response_call(self):
-        while True:
-            time.sleep(1)
-            bytes_recieved = self.serial.inWaiting()
-            if str(bytes_recieved) == "0":
-                self.log("[RESP] No response from server. Waiting...")
-                continue
+        try:
+            while True:
+                time.sleep(1)
+                bytes_recieved = self.serial.inWaiting()
+                if str(bytes_recieved) == "0":
+                    self.log("[RESP] No response from server. Waiting...")
+                    continue
 
-            print(str(self.serial.inWaiting())+" bytes recieved")
-            time.sleep(10)
-            
-            response = self.serial.read(self.serial.inWaiting())
-            print("before:" + str(response))
-            response = str(response.decode("utf-8"))
-            print("after:" + response)
-            
+                print(str(self.serial.inWaiting())+" bytes recieved")
+                time.sleep(10)
+                
+                response = self.serial.read(self.serial.inWaiting())
+                print("before:" + str(response))
+                response = str(response.decode("utf-8"))
+                print("after:" + response)
+                
 
-            if "BEGIN" in response:
-                self.call_dict["status"] = 2
-                self.log(f"Call to {target} successful", "success")
-                break
-            elif "NO CARRIER" in response:
-                self.call_dict["status"] = 3
-                self.inCall = False
-                self.log(f"Call to {target} failed due to no carrier.", "failure")
-                break
-            elif "END" in response:
-                self.call_dict["status"] = 3
-                self.inCall = False
-                self.log(f"Call to {target} failed due to end.", "failure")
-                break
-        return 1
+                if "BEGIN" in response:
+                    self.call_dict["status"] = 2
+                    self.log(f"Call to {target} successful", "success")
+                    return 1
+                elif "NO CARRIER" in response:
+                    self.call_dict["status"] = 3
+                    self.inCall = False
+                    self.log(f"Call to {target} failed due to no carrier.", "failure")
+                    break
+                elif "END" in response:
+                    self.call_dict["status"] = 3
+                    self.inCall = False
+                    self.log(f"Call to {target} failed due to end.", "failure")
+                    break
+            return 0
+        except Exception as e:
+            self.log(f"err: {str(e)}", "error")
+            return 0
     
     
     def call(self, target:str, timeout:int=20):
@@ -100,8 +108,10 @@ class Salti:
             "number": target
         }
 
-        self.init_call()
-        self.response_call()
+        if self.init_call() == 1:
+            if self.response_call() == 1:
+                return 1
+        return 0
 
             
 
@@ -178,4 +188,7 @@ while True:
         if target == "exit":
             s.off()
             break
-        print(s.call(target))
+        if s.call(target) == 0:
+            s.log("Call failed", "failure")
+            s.hangup()
+            s.off()
