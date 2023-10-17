@@ -90,10 +90,10 @@ class Salti:
 
     def on(self):
         self.log('Booting up')
-        time.sleep(5)
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(6,GPIO.OUT)
+        time.sleep(5)
         GPIO.output(6,GPIO.HIGH)
         GPIO.output(6,GPIO.LOW)
         self.serial.flushInput()
