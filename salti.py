@@ -72,7 +72,6 @@ class Salti:
                 
 
                 if "BEGIN" in response:
-                    self.call_dict["status"] = 2
                     for i in range(15):
                         time.sleep(1)
                         bytes_recieved = self.serial.inWaiting()
@@ -90,6 +89,8 @@ class Salti:
                             self.inCall = False
                             self.log(f"Call to {target} failed due to end.", "failure")
                             return 0
+                    self.call_dict["status"] = 2
+                    self.log(f"Call to {target} accepted.", "success")
                     return 1
                 else:
                     self.call_dict["status"] = 3
