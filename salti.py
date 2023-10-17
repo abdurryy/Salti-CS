@@ -62,10 +62,12 @@ class Salti:
                 break
             elif "NO CARRIER" in response:
                 self.call_dict["status"] = 3
+                self.inCall = False
                 self.log(f"Call to {target} failed due to no carrier.", "failure")
                 break
             elif "END" in response:
                 self.call_dict["status"] = 3
+                self.inCall = False
                 self.log(f"Call to {target} failed due to end.", "failure")
                 break
         return 1
