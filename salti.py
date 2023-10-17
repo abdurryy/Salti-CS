@@ -93,6 +93,8 @@ class Salti:
                     self.log(f"Call to {target} failed due to no begin.", "failure")
                     return 0
         except Exception as e:
+            if "int" in str(e):
+                return 0
             self.log(f"err: {str(e)}", "error")
             return 0
     
