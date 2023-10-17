@@ -44,25 +44,25 @@ class Salti:
         t = time.time()
         if self.serial.inWaiting():
             while True:
-                time.sleep(1)
+                time.sleep(2)
                 if time.time() - t > timeout:
                     self.log(f"Call to {target} timed out", "failure")
                     self.inCall = False
                     return 0
                 
-                    response = self.serial.read(self.serial.inWaiting()).decode()
-                    print(self.serial.inWaiting())
-                    print(response)
-                    if not "VOICE" in response:
-                        continue
-                    if "END" in response:
-                        self.inCall = False
-                        self.log(f"Call to {target} failed", "failure")
-                        return 0
-                    else:
-                        self.inCall = True
-                        self.log(f"Call to {target} successful", "success")
-                        return 1
+                response = self.serial.read(self.serial.inWaiting()).decode()
+                print(self.serial.inWaiting())
+                print(response)
+                if not "VOICE" in response:
+                    continue
+                if "END" in response:
+                    self.inCall = False
+                    self.log(f"Call to {target} failed", "failure")
+                    return 0
+                else:
+                    self.inCall = True
+                    self.log(f"Call to {target} successful", "success")
+                    return 1
 
     
     def background(self):
