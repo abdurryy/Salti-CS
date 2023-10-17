@@ -29,6 +29,29 @@ class Salti:
             color = colorama.Fore.LIGHTRED_EX
         print(f"{self.time()}{colorama.Fore.LIGHTMAGENTA_EX} {self.name} {color}{msg}{colorama.Fore.BLUE}")
 
+    def init_call(self):
+        while True:
+            time.sleep(1)
+            bytes_recieved = self.serial.inWaiting()
+            if str(bytes_recieved) == "0":
+                self.log("No response from server. Waiting...")
+                continue
+            response = self.serial.read(self.serial.inWaiting()).decode()
+            if "OK" in response:
+                self.log(f"Calling {target}, waiting for response...", "success")
+                break
+        return 1
+    
+    def response_call(self):
+        while True:
+            time.sleep(1)
+            bytes_recieved = self.serial.inWaiting()
+            if str(bytes_recieved) == "0":
+                self.log("2 No response from server. Waiting...")
+                continue
+            response = self.serial.read(self.serial.inWaiting()).decode()
+            print(response)
+        return 1
     
     
     def call(self, target:str, timeout:int=20):
@@ -42,39 +65,41 @@ class Salti:
         self.serial.write((f"ATD{target};"+'\r\n').encode())
                     
         t = time.time()
-        while True:
-            time.sleep(1)
-            bytes_recieved = self.serial.inWaiting()
-            if str(bytes_recieved) == "0":
-                self.log("No response from server. Waiting...")
-                continue
-            self.log(f"Response from server: {self.serial.read(bytes_recieved).decode()}", "success")
-            response = self.serial.read(self.serial.inWaiting()).decode()
-            print(self.serial.inWaiting())
-            print(response)
-            break
-            if self.serial.inWaiting():
-                while True:
-                    time.sleep(2)
-                    if time.time() - t > timeout:
-                        self.log(f"Call to {target} timed out", "failure")
-                        self.inCall = False
-                        return 0
-                    
-                    
-                    response = self.serial.read(self.serial.inWaiting()).decode()
-                    print(self.serial.inWaiting())
-                    print(response)
-                    if not "VOICE" in response:
-                        continue
-                    if "END" in response:
-                        self.inCall = False
-                        self.log(f"Call to {target} failed", "failure")
-                        return 0
-                    else:
-                        self.inCall = True
-                        self.log(f"Call to {target} successful", "success")
-                        return 1
+        self.call_dict = {
+            "status": 0, # 0 = not called, 1 = called, 2 = call accepted
+            "number": target
+        }
+
+        self.init_call()
+        self.response_call()
+
+            
+
+        """rint(self.serial.inWaiting())
+        print(response)
+        break
+        if self.serial.inWaiting():
+            while True:
+                time.sleep(2)
+                if time.time() - t > timeout:
+                    self.log(f"Call to {target} timed out", "failure")
+                    self.inCall = False
+                    return 0
+                
+                
+                response = self.serial.read(self.serial.inWaiting()).decode()
+                print(self.serial.inWaiting())
+                print(response)
+                if not "VOICE" in response:
+                    continue
+                if "END" in response:
+                    self.inCall = False
+                    self.log(f"Call to {target} failed", "failure")
+                    return 0
+                else:
+                    self.inCall = True
+                    self.log(f"Call to {target} successful", "success")
+                    return 1"""
 
     
     def background(self):
