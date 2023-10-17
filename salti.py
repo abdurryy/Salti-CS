@@ -77,6 +77,7 @@ class Salti:
         if self.inCall:
             self.log("Already in call", "error")
             return 0
+        self.serial.flushInput()
         
         self.inCall = True
         self.log(f"Calling {target}...")
