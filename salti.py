@@ -33,7 +33,7 @@ class Salti:
             color = colorama.Fore.LIGHTRED_EX
         print(f"{self.time()}{colorama.Fore.LIGHTMAGENTA_EX} {self.name} {color}{msg}{colorama.Fore.BLUE}")
 
-    def init_call(self):
+    def init_call(self, target):
         try:
             while True:
                 time.sleep(1)
@@ -59,7 +59,7 @@ class Salti:
             self.log(f"err: {str(e)}", "error")
             return 0
     
-    def response_call(self):
+    def response_call(self, target):
         try:
             while True:
                 time.sleep(1)
@@ -103,7 +103,7 @@ class Salti:
             return 0
     
     
-    def call(self, target:str, timeout:int=20):
+    def call(self, target:str):
         if self.inCall:
             self.log("Already in call", "error")
             return 0
@@ -111,7 +111,6 @@ class Salti:
         
         self.inCall = True
         self.log(f"Calling {target}...")
-        response = ''
         self.serial.write((f'ATD{target};\r\n').encode())
                     
         t = time.time()
@@ -120,8 +119,8 @@ class Salti:
             "number": target
         }
 
-        if self.init_call() == 1:
-            if self.response_call() == 1:
+        if self.init_call(target) == 1:
+            if self.response_call(target) == 1:
                 return 1
         return 0
 
