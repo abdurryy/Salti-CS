@@ -20,7 +20,9 @@ $ git clone https://github.com/abdurryy/Salti-CS.git
 $ cd server
 $ python -m pip install -r requirements
 $ python server.py
+```
 
+```
 # Installing the client requirements
 $ cd client
 $ npm install node
