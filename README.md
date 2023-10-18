@@ -13,7 +13,9 @@ This project aims to develop a WiFi calling application that allows users to mak
 
 ```
 $ git clone https://github.com/abdurryy/Salti-CS.git
+```
 
+````
 # Installing the server requirements
 $ cd server
 $ python -m pip install -r requirements
