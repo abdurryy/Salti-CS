@@ -1,4 +1,4 @@
-const server_api_url = "http://192.168.1.123:3001/";
+const server_api_url = "http://172.20.10.5:3001/";
 
 async function status() {
     try {
