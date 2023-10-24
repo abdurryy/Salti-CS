@@ -24,9 +24,6 @@ class Salti:
         return colorama.Fore.WHITE +"["+ datetime.now().strftime("%H:%M:%S")+"] "
     
     def log(self, msg:str, type:str="default"):
-        for i in range(10):
-            time.sleep(1)
-            print(self.serial.inWaiting())
         color = colorama.Fore.BLUE
         if type == "error":
             color = colorama.Fore.RED
