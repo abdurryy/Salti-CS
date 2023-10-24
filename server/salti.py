@@ -143,6 +143,7 @@ class Salti:
         self.inCall = False
     
     def off(self):
+        print(self.serial.inWaiting())
         self.log('Shutting down')
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
