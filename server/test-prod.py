@@ -54,10 +54,11 @@ try:
 	ser.write('AT+CHUP\r\n'.encode())
 	print('Call disconnected')
 	power_down(power_key)
-except :
+except Exception as e:
     if ser != None:
         ser.close()
         GPIO.cleanup()
+    print(f"err: {str(e)}")
 
 if ser != None:
 	ser.close()
