@@ -11,6 +11,5 @@ phone_number = '0724438573'
 power_key = 6
 rec_buff = ''
 
-bytes_recieved = ser.inWaiting()
 response = str(ser.read(ser.inWaiting()).decode("utf-8"))
-print(bytes_recieved)
+print(response)
