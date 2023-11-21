@@ -41,6 +41,8 @@ class Salti:
                 if str(bytes_recieved) == "0":
                     continue
                 response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
+                print(response)
+                open("debug.txt", "w").write(response)
                 if "ERROR" in response:
                     self.call_dict["status"] = 3
                     self.inCall = False
@@ -69,7 +71,8 @@ class Salti:
 
                 time.sleep(2)
                 response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
-                
+                print(response)
+                open("debug.txt", "w").write(response)
 
                 if "BEGIN" in response:
                     for i in range(15):
