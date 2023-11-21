@@ -66,8 +66,7 @@ class Salti:
             while True:
                 time.sleep(1)
                 bytes_recieved = self.serial.inWaiting()
-                if str(bytes_recieved) == "0":
-                    continue
+                
 
                 time.sleep(2)
                 response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
