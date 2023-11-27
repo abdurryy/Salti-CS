@@ -141,6 +141,12 @@ class Salti:
                     self.log("Reciever disconnected", "error")
                     self.inCall = False
                     self.call_dict["status"] = 3
+            
+            if self.inCall:
+                if self.call_dict["status"] != 2:
+                    self.log("Call re-aligned", "error")
+                    self.inCall = False
+                    self.call_dict["status"] = 3
                 
 
     def hangup(self):
