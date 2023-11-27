@@ -11,7 +11,7 @@ import threading
 class Salti:
     def __init__(self):
         colorama.init()
-        self.serial = serial.Serial('/dev/ttyS0',115200)
+        self.serial = serial.Serial('/dev/ttyUSB2',115200)
         self.serial.flushInput()
         self.name = "[Salti CS]"
         self.inCall = False
