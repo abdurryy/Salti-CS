@@ -81,6 +81,7 @@ async function call() {
         }
         const data = await response.json();
         if (data.status == "failure"){
+            hangup();
             document.getElementById("popup").style.display = "flex";
         }
         console.log(data);
