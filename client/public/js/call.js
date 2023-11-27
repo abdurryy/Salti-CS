@@ -1,4 +1,6 @@
 const server_api_url = "http://192.168.1.124:3001/";
+const status_speed = 500;
+
 
 async function status() {
     try {
@@ -89,5 +91,5 @@ async function call() {
 
 setInterval(() => {
     status(); 
-}, 100);
+}, status_speed);
 
