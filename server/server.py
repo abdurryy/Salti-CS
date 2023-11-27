@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import uvicorn
 import socket
+import threading
 
 app = FastAPI()
 salti_manager = Salti()
@@ -46,9 +47,12 @@ def status():
         "in_call": salti_manager.inCall,
         "call_server_dict": salti_manager.call_dict
     }
+    
 
 # run server and print server host
 if __name__ == "__main__":
     print(f"Server running on {socket.gethostbyname(socket.gethostname())}")
+    t = threading.Thread(target=salti_manager.background)
+    t.start()
     uvicorn.run(app, host="0.0.0.0", port=3001)   
 

@@ -132,20 +132,30 @@ class Salti:
     
     def background(self):
         while True:
-            try:
-                time.sleep(1)
-                response = self.serial.read(self.serial.inWaiting()).decode("utf-8")
-                if "END" in response:
-                    self.log("Reciever ended call", "failure")  
-                    self.hangup()  
-            except Exception as e:
-                self.log(f"err: {str(e)}", "error")
+            time.sleep(1)
+            if self.inCall:
+                self.serial.write((f'AT+CLCC\r\n').encode())
+                time.sleep(2)
+                response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
+                if not "+CLCC:" in response:
+                    self.log("Call not accepted")
+                    self.inCall = False
+                    self.call_dict["status"] = 3
+                    self.call_dict["number"] = ""
+                
 
     def hangup(self):
-        
-        self.serial.write('AT+CHUP\r\n'.encode())
-        self.log('Call disconnected')
-        self.inCall = False
+        self.serial.write((f'AT+CLCC\r\n').encode())
+        time.sleep(2)
+        response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
+        if "+CLCC:" in response:
+            self.serial.write((f'AT+CHUP\r\n').encode())
+            self.log('Call disconnected')
+            self.inCall = False
+            return 1
+        else:
+            self.log('Tried to hangup non-existing call!', "error")
+            return 0
     
     def off(self):
         self.log('Shutting down')
