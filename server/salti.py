@@ -133,7 +133,7 @@ class Salti:
     def background(self):
         while True:
             time.sleep(1)
-            if self.inCall:
+            if self.call_dict["status"] == 2:
                 self.serial.write((f'AT+CLCC\r\n').encode())
                 time.sleep(2)
                 response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
