@@ -144,21 +144,11 @@ class Salti:
                 
 
     def hangup(self):
-        self.serial.write((f'AT+CLCC\r\n').encode())
-        time.sleep(2)
-        response = str(self.serial.read(self.serial.inWaiting()).decode("utf-8"))
-        if "+CLCC:" in response:
-            self.serial.write((f'AT+CHUP\r\n').encode())
-            self.log('Sender disconnected')
-            self.inCall = False
-            self.call_dict["status"] = 3
-            return 1
-        else:
-            self.log('Tried to hangup non-existing call!', "error")
-            self.inCall = False
-            self.call_dict["status"] = -1
-            self.call_dict["number"] = ""
-            return 0
+        self.serial.write((f'AT+CHUP\r\n').encode())
+        self.log('Sender disconnected')
+        self.inCall = False
+        self.call_dict["status"] = 3
+        return 1
     
     def off(self):
         self.log('Shutting down')
