@@ -54,5 +54,6 @@ if __name__ == "__main__":
     print(f"Server running on {socket.gethostbyname(socket.gethostname())}")
     t = threading.Thread(target=salti_manager.background)
     t.start()
+    t.daemon = True
     uvicorn.run(app, host="0.0.0.0", port=3001)   
 
