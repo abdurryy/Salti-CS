@@ -27,6 +27,7 @@ async function status() {
 
             } else if (data.call_server_dict.status == 2){
                 msg = `CURRENTLY IN CALL WITH ${target}`;
+                hangupbtn.style.display = "flex";
                 hangupgtn.innerHTML = `HANG UP`;
                 color = "green";
             } else if (data.call_server_dict.status == 3){
@@ -39,7 +40,7 @@ async function status() {
             
             callbtn.disabled = true;
             callbtn.style.backgroundColor = "grey";
-            hangupbtn.style.display = "flex";
+            
         } else {
             callbtn.disabled = false;
             hangupbtn.style.display = "none";
@@ -80,7 +81,6 @@ async function call() {
         }
         const data = await response.json();
         if (data.status == "failure"){
-            hangup();
             document.getElementById("popup").style.display = "flex";
         }
         console.log(data);
