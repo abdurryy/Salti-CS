@@ -95,6 +95,8 @@ class Salti:
                     self.log(f"Call to {target} accepted.", "success")
                     return 1
                 else:
+                    if "" in response: # THERE IS NOTHING IN THE RESPONSE
+                        continue
                     self.call_dict["status"] = 3
                     self.inCall = False
                     self.log(f"Call to {target} failed due to no begin.", "failure")
