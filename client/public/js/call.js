@@ -1,5 +1,5 @@
 const server_api_url = "http://192.168.1.124:3001/";
-const status_speed = 500;
+const status_speed = 1000;
 
 
 async function status() {
