@@ -74,7 +74,7 @@ class Salti:
                 open("debug.txt", "w").write(response)
 
                 if "BEGIN" in response:
-                    for i in range(15):
+                    for i in range(16):
                         time.sleep(1)
                         bytes_recieved = self.serial.inWaiting()
                         if str(bytes_recieved) == "0":
