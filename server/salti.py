@@ -114,6 +114,7 @@ class Salti:
             return 0
         self.serial.flushInput()
         
+        self.inCall = True
         self.log(f"Calling {target}...")
         self.serial.write((f'ATD{target};\r\n').encode())
                     
