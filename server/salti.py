@@ -142,6 +142,7 @@ class Salti:
                 self.log(f"err: {str(e)}", "error")
 
     def hangup(self):
+        
         self.serial.write('AT+CHUP\r\n'.encode())
         self.log('Call disconnected')
         self.inCall = False
