@@ -155,6 +155,9 @@ class Salti:
             return 1
         else:
             self.log('Tried to hangup non-existing call!', "error")
+            self.inCall = False
+            self.call_dict["status"] = -1
+            self.call_dict["number"] = ""
             return 0
     
     def off(self):
