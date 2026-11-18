@@ -1,4 +1,6 @@
-const server_api_url = "http://192.168.1.124:3001/";
+// Host running server/server.py. Defaults to the host serving this page,
+// which is correct when the client and the gateway run on the same Pi.
+const server_api_url = `http://${location.hostname}:3001/`;
 const status_speed = 1000;
 
 
